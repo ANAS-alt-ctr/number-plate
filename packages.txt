@@ -1,0 +1,7 @@
+libgl1
+libglib2.0-0
+streamlit
+ultralytics
+numpy
+opencv-python
+Pillow
