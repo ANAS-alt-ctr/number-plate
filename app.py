@@ -67,7 +67,7 @@ if model:
         try:
             # Display uploaded image
             image = Image.open(uploaded_file)
-            st.image(image, caption='Uploaded Image', use_column_width=True, clamp=True)
+            st.image(image, caption='Uploaded Image', use_container_width=True, clamp=True)
             
             # Convert to numpy array for opencv/yolo
             img_array = np.array(image)
@@ -77,13 +77,12 @@ if model:
                 results = model(image)
                 
                 # Visualize results
-                res_plotted = results[0].plot()
-                res_plotted_pil = Image.fromarray(res_plotted[..., ::-1]) # RGB to BGR fix if needed, but usually plot returns BGR
-                # Actually ultralytics plot() returns BGR numpy array
-                res_plotted_pil = Image.fromarray(res_plotted[..., ::-1]) 
+                res_plotted = results[0].plot()  # Returns BGR numpy array
+                res_plotted_rgb = cv2.cvtColor(res_plotted, cv2.COLOR_BGR2RGB)
+                res_plotted_pil = Image.fromarray(res_plotted_rgb)
 
                 st.success("Detection Complete!")
-                st.image(res_plotted_pil, caption='Detected License Plates', use_column_width=True)
+                st.image(res_plotted_pil, caption='Detected License Plates', use_container_width=True)
                 
                 # Optional: Display detected text (if OCR was integrated, but here just boxes)
                 # st.write(results[0].boxes) -- raw boxes info if needed
